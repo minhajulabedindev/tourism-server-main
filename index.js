@@ -22,20 +22,43 @@ async function run() {
     await client.connect();
     const database = client.db("tourism");
     const offerCollection = database.collection("country");
+    const bookingCollection = database.collection("booking");
+    //post api
+    app.post("/offers", async (req, res) => {
+      const cursor = req.body;
+      const result = await offerCollection.insertOne(cursor);
+      res.json(result);
+    });
 
     //single api
-    //iiiiiiiiiiiiiiiiiiiii
     app.get("/offers/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await offerCollection.findOne(query);
       res.json(result);
     });
+    // app.get("/offers/:booking", async (req, res) => {
+    //   const booking = req.params.booking;
+    //   const query = { _id: ObjectId(booking) };
+    //   const result = await offerCollection.findOne(query);
+    //   res.json(result);
+    // });
     //get api
     app.get("/offers", async (req, res) => {
       const cursor = offerCollection.find({});
       const result = await cursor.toArray();
       res.send(result);
+    });
+    //-------------------------------------------------
+    app.get("/booking", async (req, res) => {
+      const cursor = bookingCollection.find({});
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    app.post("/booking", async (req, res) => {
+      const cursor = req.body;
+      const result = await bookingCollection.insertOne(cursor);
+      res.json(result);
     });
   } finally {
     // await client.close();
