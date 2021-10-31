@@ -37,14 +37,10 @@ async function run() {
       const result = await offerCollection.findOne(query);
       res.json(result);
     });
-    // app.get("/offers/:booking", async (req, res) => {
-    //   const booking = req.params.booking;
-    //   const query = { _id: ObjectId(booking) };
-    //   const result = await offerCollection.findOne(query);
-    //   res.json(result);
-    // });
+
     //get api
     app.get("/offers", async (req, res) => {
+      console.log("offer get");
       const cursor = offerCollection.find({});
       const result = await cursor.toArray();
       res.send(result);
@@ -60,6 +56,15 @@ async function run() {
       const result = await bookingCollection.insertOne(cursor);
       res.json(result);
     });
+    //-------------- Delete Api ------------------
+
+    app.delete("/booking/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: id };
+      const result = await bookingCollection.deleteOne(query);
+      res.json(result);
+    });
+    //single api
   } finally {
     // await client.close();
   }
